@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_manage_words">
+
+    <fragment
+        android:id="@+id/nav_manage_words"
+        android:name="com.nafanya.words.feature.manageWords.list.ManageWordsFragment"
+        android:label="@string/menu_manage_words"
+        tools:layout="@layout/fragment_manage_words" >
+        <action
+            android:id="@+id/action_nav_manage_words_to_nav_add_word"
+            app:destination="@id/nav_add_word" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_add_word"
+        android:name="com.nafanya.words.feature.manageWords.addWord.AddWordFragment"
+        android:label="Add word"
+        tools:layout="@layout/fragment_add_word"/>
+
+    <fragment
+        android:id="@+id/nav_learn"
+        android:name="com.nafanya.words.feature.learn.LearnFragment"
+        android:label="@string/menu_learn"
+        tools:layout="@layout/fragment_learn" />
+
+    <fragment
+        android:id="@+id/nav_test"
+        android:name="com.nafanya.words.feature.test.ChooseModeFragment"
+        android:label="Choose mode"
+        tools:layout="@layout/fragment_choose_mode">
+        <action
+            android:id="@+id/action_nav_choose_mode_to_nav_test"
+            app:destination="@id/nav_actual_test"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_actual_test"
+        android:name="com.nafanya.words.feature.test.TestFragment"
+        android:label="@string/menu_test"
+        tools:layout="@layout/fragment_test" >
+        <action
+            android:id="@+id/action_nav_actual_test_to_nav_test_results"
+            app:popUpTo="@id/nav_test"
+            app:destination="@id/nav_test_results" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_test_results"
+        android:name="com.nafanya.words.feature.test.TestResultFragment"
+        android:label="Test Results"
+        tools:layout="@layout/fragment_test_result">
+        <action
+            android:id="@+id/action_nav_test_results_to_nav_test"
+            app:destination="@id/nav_test" />
+    </fragment>
+
+</navigation>

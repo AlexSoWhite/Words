@@ -1,0 +1,60 @@
+<resources>
+    <string name="app_name">Words</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="about">About</string>
+
+    <string name="app_version">Running %1$s version %2$s</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_manage_words">Your words</string>
+    <string name="menu_learn">Learn</string>
+    <string name="menu_test">Test</string>
+
+    <string name="string_continue">continue</string>
+    <string name="string_finish">finish</string>
+    <string name="string_no_words_learned">You don\'t have any words marked as learned</string>
+    <string name="string_submit">submit</string>
+
+    <string name="string_enter_word">enter word</string>
+    <string name="string_enter_translation">enter translation</string>
+    <string name="string_added_successfully">Added successfully</string>
+    <string name="string_word_already_exists">Word already exists</string>
+    <string name="string_some_fields_are_empty">Some fields are empty</string>
+
+    <string name="string_delete_word">Delete word</string>
+    <string name="string_mark_as_not_learned">Mark as not learned</string>
+    <string name="string_mark_as_learned">Mark as learned</string>
+    <string name="string_delete_word_confirmation">Delete word \"%1$s\"?</string>
+    <string name="string_remove_from_learned_confirmation">Mark word \"%1$s\" as not learned?</string>
+    <string name="string_yes">Yes</string>
+    <string name="string_no">No</string>
+    <string name="string_deleted_successfully">Deleted successfully</string>
+    <string name="string_marked_as_not_learned">Marked as not learned</string>
+    <string name="string_word_mastered">mastered %1$d/%2$d</string>
+
+    <string name="string_choose_mode">choose mode</string>
+    <string name="string_native_to_japanese">native to japanese</string>
+    <string name="string_japanese_to_native">japanese to native</string>
+
+    <string name="string_change_mode">change mode</string>
+    <string name="string_no_words_in_dictionary">You don\'t have any words in dictionary</string>
+    <string name="string_everything_learned">You learned all your words!</string>
+    <string name="string_marked_as_learned">Word marked as learned</string>
+    <string name="string_error_occurred">An error occurred</string>
+    <string name="string_mode_description_japanese_to_native">translate japanese word to native</string>
+    <string name="string_mode_description_native_to_japanese">translate native word to japanese</string>
+
+    <string name="string_click_here_to_add_word">click here to add word</string>
+
+    <string name="string_your_result">Your result:</string>
+    <string name="string_test_results">%1$d/%2$d</string>
+    <string name="string_great">great</string>
+
+    <string name="string_app_description">Japanese vocabulary app</string>
+    <string name="search">search</string>
+
+</resources>

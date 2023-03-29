@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_manage_words"
+            android:icon="@drawable/ic_menu_add_words"
+            android:title="@string/menu_manage_words" />
+        <item
+            android:id="@+id/nav_learn"
+            android:icon="@drawable/ic_menu_learn"
+            android:title="@string/menu_learn" />
+        <item
+            android:id="@+id/nav_test"
+            android:icon="@drawable/ic_menu_test"
+            android:title="@string/menu_test"
+            />
+    </group>
+</menu>

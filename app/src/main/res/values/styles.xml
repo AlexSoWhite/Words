@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="customPopupMenuTextColor" format="color|reference"/>
+    <attr name="customPopupMenuBackground" format="color|reference"/>
+    <attr name="customDoneIconColor" format="color|reference"/>
+
+    <attr name="band" format="color|reference"/>
+
+    <style name="selectable">
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+    </style>
+    <style name="selectableCardView">
+        <item name="android:foreground">?android:attr/selectableItemBackgroundBorderless</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="dropdownMenuStyle" parent="Widget.AppCompat.ListPopupWindow">
+        <item name="android:textColor">?attr/customPopupMenuTextColor</item>
+    </style>
+</resources>
