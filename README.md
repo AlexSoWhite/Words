@@ -1,2 +1,2 @@
 # Words
-android app for learning words
+android learning words app
