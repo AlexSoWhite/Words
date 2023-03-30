@@ -18,7 +18,7 @@ data class Word(
 ) {
     companion object {
         const val TEST_PRIORITY_MAX = 10
-        const val TEST_PRIORITY_MIN = 1
+        const val TEST_PRIORITY_MIN = 0
     }
 }
 
