@@ -13,8 +13,6 @@ import com.nafanya.words.feature.tts.TtsProvider
 import com.nafanya.words.feature.word.Mode
 import com.nafanya.words.feature.word.Word
 import com.nafanya.words.feature.word.WordCardView
-import com.nafanya.words.feature.word.first
-import com.nafanya.words.feature.word.second
 import javax.inject.Inject
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
@@ -105,6 +103,7 @@ class LearnViewModel @Inject constructor(
                 callback.inScope(viewModelScope, WordDatabaseProvider.OperationResult.Failure)
             }
         }
+        mIsShowingFirstPart.value = true
     }
 
     private fun updateWordQueue() {
