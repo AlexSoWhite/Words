@@ -8,7 +8,6 @@ import com.nafanya.words.core.coroutines.IOCoroutineProvider
 import com.nafanya.words.core.coroutines.inScope
 import com.nafanya.words.core.db.WordDatabaseProvider
 import com.nafanya.words.feature.word.Word
-import com.nafanya.words.feature.word.setMaxTestPriority
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect

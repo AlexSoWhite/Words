@@ -16,10 +16,6 @@ import com.nafanya.words.feature.test.TestResultFragment.Companion.WORDS_COUNT
 import com.nafanya.words.feature.tts.TtsProvider
 import com.nafanya.words.feature.word.Mode
 import com.nafanya.words.feature.word.Word
-import com.nafanya.words.feature.word.decreaseTestPriority
-import com.nafanya.words.feature.word.first
-import com.nafanya.words.feature.word.increaseTestPriority
-import com.nafanya.words.feature.word.second
 import javax.inject.Inject
 import kotlinx.coroutines.launch
 
@@ -55,11 +51,13 @@ class TestViewModel @Inject constructor(
 
     private lateinit var mMode: Mode
 
+    private var pendingList = arrayListOf<Word>()
+
     init {
         ioCoroutineProvider.ioScope.launch {
             databaseProvider.words.collect {
                 val list: MutableList<Word> = it.filter { word -> word.isLearned } as MutableList<Word>
-                if (list.isEmpty()) {
+                if (list.isEmpty() && mWordList == null) {
                     mState.postValue(TestFragment.State.NoWordsLearned)
                 } else if (mWordList == null) {
                     mWordList = createWordList(list)
@@ -74,15 +72,23 @@ class TestViewModel @Inject constructor(
     private fun createWordList(source: List<Word>): List<Word> {
         val list = mutableListOf<Word>()
         source.sortedByDescending {
-            word -> word.testPriority
+            word -> word.testPriority + word.accumulatedTestPriority
         }.groupBy {
-            word -> word.testPriority
+            word -> word.testPriority + word.accumulatedTestPriority
         }.entries.forEach { entry: Map.Entry<Int, List<Word>> ->
             if (list.size < 10) {
                 entry.value.shuffled().forEach {
                     if (list.size < 10) {
                         list.add(it)
+                    } else {
+                        it.increaseBalancer(source.size)
+                        pendingList.add(it)
                     }
+                }
+            } else {
+                entry.value.forEach {
+                    it.increaseBalancer(source.size)
+                    pendingList.add(it)
                 }
             }
         }
@@ -100,12 +106,14 @@ class TestViewModel @Inject constructor(
     }
 
     fun checkWord(firstPartInput: String) {
-        val result = firstPartInput == mCurrentWord.value!!.first(mMode)
+        val word = mCurrentWord.value!!
+        word.dropTestAccumulators()
+        val result = firstPartInput == word.first(mMode)
         if (result) {
             correctAnswers ++
-            decreaseTestPriority(mCurrentWord.value!!)
+            decreaseTestPriorityAndUpdate(word)
         } else {
-            increaseTestPriority(mCurrentWord.value!!)
+            increaseTestPriorityAndUpdate(word)
         }
         if (currentPosition == wordsCount - 1) {
             val bundle = bundleOf(
@@ -116,17 +124,24 @@ class TestViewModel @Inject constructor(
                 isCorrect = result,
                 results = bundle
             )
+            writePendingChanges()
         } else {
             mState.value = TestFragment.State.IsCheckedWord(result)
         }
     }
 
-    private fun decreaseTestPriority(word: Word) {
+    private fun writePendingChanges() {
+        pendingList.forEach {
+            updateWord(it)
+        }
+    }
+
+    private fun decreaseTestPriorityAndUpdate(word: Word) {
         word.decreaseTestPriority()
         updateWord(word)
     }
 
-    private fun increaseTestPriority(word: Word) {
+    private fun increaseTestPriorityAndUpdate(word: Word) {
         word.increaseTestPriority()
         updateWord(word)
     }
