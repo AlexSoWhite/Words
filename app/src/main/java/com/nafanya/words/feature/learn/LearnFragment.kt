@@ -70,19 +70,23 @@ class LearnFragment : BaseFragment<FragmentLearnBinding>() {
         changeMode.isVisible = true
         modeDescription.isVisible = true
         wordNumber.isVisible = true
-        renderMode()
-        wordCard.attachTts(ttsProvider)
-        viewModel.currentWord.observe(viewLifecycleOwner) {
-            wordCard.setWord(it)
+        viewModel.text.observe(viewLifecycleOwner) {
+            wordCard.setText(it)
         }
         viewModel.wordNumber.observe(viewLifecycleOwner) {
             wordNumber.text = it
         }
+        viewModel.mode.observe(viewLifecycleOwner) {
+            renderMode(it)
+        }
         wordCard.setOnSwipeCallback {
             viewModel.swipe(it)
         }
-        wordCard.setOnLearnedCallback { word ->
-            viewModel.addWordToLearned(word) {
+        wordCard.setOnVoicePressedCallback {
+            viewModel.speakOut()
+        }
+        wordCard.setOnLearnedCallback {
+            viewModel.addWordToLearned {
                 when (it) {
                     is WordDatabaseProvider.OperationResult.Success ->
                         showToast(getString(R.string.string_marked_as_learned))
@@ -91,14 +95,19 @@ class LearnFragment : BaseFragment<FragmentLearnBinding>() {
                 }
             }
         }
+        wordCard.setOnVoicePressedCallback {
+            viewModel.speakOut()
+        }
+        wordCard.setOnClickCallback {
+            viewModel.triggerCardFlip()
+        }
         changeMode.setOnClickListener {
-            wordCard.changeMode()
-            renderMode()
+            viewModel.changeMode()
         }
     }
 
-    private fun renderMode() = with(binding) {
-        modeDescription.text = if (wordCard.mode is Mode.WordToTranslation) {
+    private fun renderMode(mode: Mode) = with(binding) {
+        modeDescription.text = if (mode is Mode.WordToTranslation) {
             getString(R.string.string_mode_description_japanese_to_native)
         } else {
             getString(R.string.string_mode_description_native_to_japanese)
