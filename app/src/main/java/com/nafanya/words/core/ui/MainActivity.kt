@@ -1,10 +1,15 @@
 package com.nafanya.words.core.ui
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
+import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.forEach
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -53,7 +58,30 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main, menu)
-
+        menu.forEach {
+            val text = it.title!!
+            val span = SpannableString(text)
+            val typedValue = TypedValue()
+            theme.resolveAttribute(
+                androidx.appcompat.R.attr.colorControlNormal,
+                typedValue,
+                true
+            )
+            val array = obtainStyledAttributes(
+                typedValue.resourceId,
+                intArrayOf(androidx.appcompat.R.attr.colorControlNormal)
+            )
+            span.setSpan(
+                ForegroundColorSpan(
+                    array.getColor(0, Color.GRAY)
+                ),
+                0,
+                span.length,
+                0
+            )
+            it.title = span
+            array.recycle()
+        }
         return true
     }
 
