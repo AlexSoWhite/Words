@@ -124,6 +124,7 @@ class LearnViewModel @Inject constructor(
                 }
             }
         }
+        mIsShowingFirstPart.value = true
         mCurrentWord.value = wordList!![currentPosition]
     }
 
