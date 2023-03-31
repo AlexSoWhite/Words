@@ -5,7 +5,10 @@ import android.view.MotionEvent
 import android.view.View
 import kotlin.math.abs
 
-class SwipeTouchListener(private val context: Context) : View.OnTouchListener {
+class SwipeTouchListener(
+    private val context: Context,
+    private val cardStart: Float
+) : View.OnTouchListener {
 
     private var mayBeClick = false
 
@@ -22,15 +25,14 @@ class SwipeTouchListener(private val context: Context) : View.OnTouchListener {
     }
 
     override fun onTouch(view: View, event: MotionEvent): Boolean {
-        val displayMetrics = context.resources.displayMetrics
         val viewWidth = view.width
-        val cardStart = (displayMetrics.widthPixels.toFloat() / 2) - (viewWidth / 2)
 
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 mayBeClick = true
                 startX = event.rawX
             }
+
             MotionEvent.ACTION_MOVE -> {
                 // get the new coordinate of the event on X-axis
                 val newX = event.rawX

@@ -121,10 +121,10 @@ class LearnViewModel @Inject constructor(
         viewModelScope.launch {
             delay(RETURN_ANIMATION_DURATION + CARD_SWIPE_POST_ANIMATION)
             when (direction) {
-                is WordCardView.SwipeDirection.RIGHT -> {
+                is WordCardView.SwipeDirection.LEFT -> {
                     currentPosition = (currentPosition + 1) % wordList!!.size
                 }
-                is WordCardView.SwipeDirection.LEFT -> {
+                is WordCardView.SwipeDirection.RIGHT -> {
                     currentPosition = (currentPosition - 1) % wordList!!.size
                     if (currentPosition < 0) {
                         currentPosition = wordList!!.size - 1

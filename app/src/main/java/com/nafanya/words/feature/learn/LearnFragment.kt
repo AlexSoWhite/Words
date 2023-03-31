@@ -83,7 +83,10 @@ class LearnFragment : BaseFragment<FragmentLearnBinding>() {
         viewModel.mode.observe(viewLifecycleOwner) {
             renderMode(it)
         }
-        val swipeTouchListener = SwipeTouchListener(requireContext())
+        val swipeTouchListener = SwipeTouchListener(
+            requireContext(),
+            wordCard.x
+        )
         swipeTouchListener.setOnSwipeLeftListener {
             viewModel.swipe(WordCardView.SwipeDirection.LEFT)
         }
