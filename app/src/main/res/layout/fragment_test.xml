@@ -37,7 +37,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        style="@style/selectable"
+        style="@style/selectableBorderless"
         android:id="@+id/voice_second"
         android:layout_width="30dp"
         android:layout_height="30dp"
@@ -75,7 +75,7 @@
         android:layout_marginEnd="10dp"
         android:src="@drawable/ic_sound"
         android:visibility="gone"
-        style="@style/selectable"
+        style="@style/selectableBorderless"
         tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@id/first_part"
         app:layout_constraintEnd_toStartOf="@id/first_part"

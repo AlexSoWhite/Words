@@ -3,10 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:cardElevation="5dp"
     android:padding="10dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    app:cardElevation="5dp"
     tools:layout_gravity="center">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -29,7 +29,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            style="@style/selectable"
+            style="@style/selectableBorderless"
             android:id="@+id/word_sound"
             android:padding="5dp"
             android:layout_width="wrap_content"

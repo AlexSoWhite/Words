@@ -11,9 +11,11 @@ import com.nafanya.words.core.coroutines.inScope
 import com.nafanya.words.core.db.WordDatabaseProvider
 import com.nafanya.words.feature.tts.TtsProvider
 import com.nafanya.words.feature.word.Mode
+import com.nafanya.words.feature.word.SwipeTouchListener.Companion.RETURN_ANIMATION_DURATION
 import com.nafanya.words.feature.word.Word
 import com.nafanya.words.feature.word.WordCardView
 import javax.inject.Inject
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
@@ -69,6 +71,10 @@ class LearnViewModel @Inject constructor(
     val mode: LiveData<Mode>
         get() = mMode
 
+    companion object {
+        const val CARD_SWIPE_POST_ANIMATION = 50L
+    }
+
     init {
         ioCoroutineProvider.ioScope.launch {
             databaseProvider.words.collect {
@@ -112,19 +118,22 @@ class LearnViewModel @Inject constructor(
     }
 
     fun swipe(direction: WordCardView.SwipeDirection) {
-        when (direction) {
-            is WordCardView.SwipeDirection.LEFT -> {
-                currentPosition = (currentPosition + 1) % wordList!!.size
-            }
-            is WordCardView.SwipeDirection.RIGHT -> {
-                currentPosition = (currentPosition - 1) % wordList!!.size
-                if (currentPosition < 0) {
-                    currentPosition = wordList!!.size - 1
+        viewModelScope.launch {
+            delay(RETURN_ANIMATION_DURATION + CARD_SWIPE_POST_ANIMATION)
+            when (direction) {
+                is WordCardView.SwipeDirection.RIGHT -> {
+                    currentPosition = (currentPosition + 1) % wordList!!.size
+                }
+                is WordCardView.SwipeDirection.LEFT -> {
+                    currentPosition = (currentPosition - 1) % wordList!!.size
+                    if (currentPosition < 0) {
+                        currentPosition = wordList!!.size - 1
+                    }
                 }
             }
+            mIsShowingFirstPart.value = true
+            mCurrentWord.value = wordList!![currentPosition]
         }
-        mIsShowingFirstPart.value = true
-        mCurrentWord.value = wordList!![currentPosition]
     }
 
     private fun updatePositionIfNeeded() {

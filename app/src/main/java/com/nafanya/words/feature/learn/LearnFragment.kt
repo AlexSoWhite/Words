@@ -1,5 +1,6 @@
 package com.nafanya.words.feature.learn
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,8 @@ import com.nafanya.words.core.ui.BaseFragment
 import com.nafanya.words.databinding.FragmentLearnBinding
 import com.nafanya.words.feature.tts.TtsProvider
 import com.nafanya.words.feature.word.Mode
+import com.nafanya.words.feature.word.SwipeTouchListener
+import com.nafanya.words.feature.word.WordCardView
 import javax.inject.Inject
 
 class LearnFragment : BaseFragment<FragmentLearnBinding>() {
@@ -64,6 +67,7 @@ class LearnFragment : BaseFragment<FragmentLearnBinding>() {
         wordNumber.isVisible = false
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun renderNotEmptyDictionary() = with(binding) {
         emptyDictionaryMockup.isVisible = false
         wordCard.isVisible = true
@@ -79,11 +83,19 @@ class LearnFragment : BaseFragment<FragmentLearnBinding>() {
         viewModel.mode.observe(viewLifecycleOwner) {
             renderMode(it)
         }
-        wordCard.setOnSwipeCallback {
-            viewModel.swipe(it)
+        val swipeTouchListener = SwipeTouchListener(requireContext())
+        swipeTouchListener.setOnSwipeLeftListener {
+            viewModel.swipe(WordCardView.SwipeDirection.LEFT)
         }
+        swipeTouchListener.setOnSwipeRightListener {
+            viewModel.swipe(WordCardView.SwipeDirection.RIGHT)
+        }
+        wordCard.setOnTouchListener(swipeTouchListener)
         wordCard.setOnVoicePressedCallback {
             viewModel.speakOut()
+        }
+        wordCard.setOnClickListener {
+            viewModel.triggerCardFlip()
         }
         wordCard.setOnLearnedCallback {
             viewModel.addWordToLearned {
@@ -94,12 +106,6 @@ class LearnFragment : BaseFragment<FragmentLearnBinding>() {
                         showToast(getString(R.string.string_error_occurred))
                 }
             }
-        }
-        wordCard.setOnVoicePressedCallback {
-            viewModel.speakOut()
-        }
-        wordCard.setOnClickCallback {
-            viewModel.triggerCardFlip()
         }
         changeMode.setOnClickListener {
             viewModel.changeMode()
