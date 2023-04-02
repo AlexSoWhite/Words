@@ -15,5 +15,6 @@
         <item name="customPopupMenuTextColor">?attr/colorControlNormal</item>
         <item name="customPopupMenuBackground">#202020</item>
         <item name="customDoneIconColor">?attr/colorControlNormal</item>
+        <item name="wordCardViewBackground">#303030</item>
     </style>
 </resources>

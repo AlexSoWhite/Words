@@ -15,6 +15,7 @@
         <item name="customPopupMenuTextColor">?attr/colorControlNormal</item>
         <item name="customPopupMenuBackground">@color/white</item>
         <item name="customDoneIconColor">?attr/colorControlNormal</item>
+        <item name="wordCardViewBackground">@color/white</item>
     </style>
 
     <style name="Theme.Words.NoActionBar">

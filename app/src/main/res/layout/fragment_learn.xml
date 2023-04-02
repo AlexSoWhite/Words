@@ -40,18 +40,16 @@
         android:layout_marginBottom="10dp"
         tools:text="translate japanese word to native"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@id/word_card"
+        app:layout_constraintBottom_toTopOf="@id/pager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/word_number"
         app:layout_constraintVertical_chainStyle="packed" />
 
-    <com.nafanya.words.feature.word.WordCardView
-        android:id="@+id/word_card"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/pager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="24dp"
-        app:cardBackgroundColor="@android:color/transparent"
+        android:layout_height="250dp"
         app:layout_constraintBottom_toTopOf="@id/change_mode"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -67,6 +65,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/word_card" />
+        app:layout_constraintTop_toBottomOf="@id/pager" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

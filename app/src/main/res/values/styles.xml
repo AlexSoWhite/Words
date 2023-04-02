@@ -4,10 +4,13 @@
     <attr name="customPopupMenuBackground" format="color|reference"/>
     <attr name="customDoneIconColor" format="color|reference"/>
 
-    <attr name="band" format="color|reference"/>
+    <attr name="wordCardViewBackground" format="color"/>
 
     <style name="selectable">
         <item name="android:background">?android:attr/selectableItemBackground</item>
+    </style>
+    <style name="selectableBorderless">
+        <item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
     </style>
     <style name="selectableCardView">
         <item name="android:foreground">?android:attr/selectableItemBackgroundBorderless</item>
