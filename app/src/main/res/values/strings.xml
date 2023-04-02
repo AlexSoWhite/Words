@@ -47,6 +47,7 @@
     <string name="string_error_occurred">An error occurred</string>
     <string name="string_mode_description_japanese_to_native">translate japanese word to native</string>
     <string name="string_mode_description_native_to_japanese">translate native word to japanese</string>
+    <string name="string_word_number">word %1$d of %2$d</string>
 
     <string name="string_click_here_to_add_word">click here to add word</string>
 

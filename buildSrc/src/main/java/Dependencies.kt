@@ -9,6 +9,7 @@ object Dependencies {
             const val viewModel = "2.5.1"
             const val navigationFragment = "2.3.5"
             const val navigationUi = "2.3.5"
+            const val viewPager2 = "1.0.0"
         }
 
         const val androidxCore = "androidx.core:core-ktx:${Versions.coreCtx}"
@@ -17,7 +18,8 @@ object Dependencies {
         const val liveData = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.liveData}"
         const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.viewModel}"
         const val navigationFragment = "androidx.navigation:navigation-fragment-ktx:${Versions.navigationFragment}"
-        const val navigationUi= "androidx.navigation:navigation-ui-ktx:${Versions.navigationUi}"
+        const val navigationUi = "androidx.navigation:navigation-ui-ktx:${Versions.navigationUi}"
+        const val viewPager2 = "androidx.viewpager2:viewpager2:${Versions.viewPager2}"
     }
 
     object Material {
@@ -55,10 +57,6 @@ object Dependencies {
 
         const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutinesVersion}"
         const val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutinesVersion}"
-    }
-
-    object Detekt {
-        const val formatting = "io.gitlab.arturbosch.detekt:detekt-formatting:${Plugins.Detekt.version}"
     }
 
     object Test {

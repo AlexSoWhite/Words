@@ -65,6 +65,7 @@ dependencies {
     implementation(Dependencies.Androidx.viewModel)
     implementation(Dependencies.Androidx.navigationFragment)
     implementation(Dependencies.Androidx.navigationUi)
+    implementation(Dependencies.Androidx.viewPager2)
 
     implementation(Dependencies.Material.material)
 

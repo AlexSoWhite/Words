@@ -1,21 +1,21 @@
 package com.nafanya.words.feature.learn
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.nafanya.words.core.coroutines.IOCoroutineProvider
 import com.nafanya.words.core.coroutines.inScope
 import com.nafanya.words.core.db.WordDatabaseProvider
+import com.nafanya.words.feature.Logger.LEARN_VIEW_MODEL
 import com.nafanya.words.feature.tts.TtsProvider
 import com.nafanya.words.feature.word.Mode
-import com.nafanya.words.feature.word.SwipeTouchListener.Companion.RETURN_ANIMATION_DURATION
 import com.nafanya.words.feature.word.Word
-import com.nafanya.words.feature.word.WordCardView
 import javax.inject.Inject
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
@@ -26,60 +26,72 @@ class LearnViewModel @Inject constructor(
 ) : ViewModel() {
 
     private var wordList: List<Word>? = null
-        set(value) {
-            field = value
-            mWordNumberText.postValue("word ${currentPosition + 1} of ${wordList!!.size}")
-        }
 
-    private val mState: MutableLiveData<LearnFragment.State> by lazy {
-        MutableLiveData()
-    }
+    private val mWords = MutableLiveData<List<Word>>()
+
+    private val mState = MutableLiveData<LearnFragment.State>()
     val state: LiveData<LearnFragment.State>
         get() = mState
 
-    private val mCurrentWord: MutableLiveData<Word> by lazy {
-        MutableLiveData()
-    }
-    val text: LiveData<String>
-        get() = combine(
-            mCurrentWord.asFlow(),
-            mMode.asFlow(),
-            mIsShowingFirstPart.asFlow()
-        ) { word, mode, isFirstPart ->
-            if (isFirstPart) {
-                word.first(mode)
-            } else {
-                word.second(mode)
-            }
-        }.asLiveData()
-
-    private val mWordNumberText: MutableLiveData<String> by lazy {
-        MutableLiveData()
-    }
-    val wordNumber: LiveData<String>
-        get() = mWordNumberText
-
-    private var currentPosition = 0
-        set(value) {
-            field = value
-            mWordNumberText.postValue("word ${currentPosition + 1} of ${wordList!!.size}")
+    private var shouldSuppressNextFlip = false
+        get() {
+            val suppress = field
+            field = false
+            return suppress
+        }
+    private val mIsShowingFirstPart = MutableLiveData(true)
+    val isShowingFirstPart: LiveData<Pair<Boolean, Boolean>>
+        get() = mIsShowingFirstPart.map {
+            Pair(it, shouldSuppressNextFlip)
         }
 
-    private val mIsShowingFirstPart = MutableLiveData(true)
-
     private val mMode = MutableLiveData<Mode>(Mode.WordToTranslation)
-    val mode: LiveData<Mode>
-        get() = mMode
+    val mode: LiveData<Pair<Mode, Boolean>>
+        get() = mMode.map {
+            Pair(it, shouldSuppressNextFlip)
+        }
 
-    companion object {
-        const val CARD_SWIPE_POST_ANIMATION = 50L
+    private val mCurrentPosition = MutableLiveData(0)
+    val currentPosition: LiveData<Pair<Int, Int>>
+        get() = combine(
+            mCurrentPosition.asFlow(),
+            mWords.asFlow()
+        ) { position: Int, list: List<Word> ->
+            Pair(position + 1, list.size)
+        }.asLiveData()
+
+    val window: LiveData<Triple<Word, Word, Word>>
+        get() = combine(
+            mWords.asFlow(),
+            mCurrentPosition.asFlow()
+        ) { list, position ->
+            val previousWord = if (position > 0) {
+                list[position - 1]
+            } else {
+                list[list.size - 1]
+            }
+            val nextWord = if (position != list.size - 1) {
+                list[position + 1]
+            } else {
+                list[0]
+            }
+            Triple(previousWord, list[position], nextWord)
+        }.asLiveData()
+
+    private val mTriggerForceUpdate = MutableLiveData<Unit>()
+    val forceUpdate: LiveData<Unit>
+        get() = mTriggerForceUpdate
+
+    sealed class SwipeDirection {
+        object RIGHT : SwipeDirection()
+        object LEFT : SwipeDirection()
     }
 
     init {
         ioCoroutineProvider.ioScope.launch {
             databaseProvider.words.collect {
                 if (it.isEmpty()) {
-                    mState.postValue(LearnFragment.State.Empty)
+                    updateState(LearnFragment.State.Empty)
                 } else {
                     val list: MutableList<Word> = it.filter { word -> !word.isLearned } as MutableList<Word>
                     wordList = if (wordList == null) {
@@ -89,21 +101,44 @@ class LearnViewModel @Inject constructor(
                         wordList!!.filter { word -> list.contains(word) }
                     }
                     if (wordList!!.isEmpty()) {
-                        mState.postValue(LearnFragment.State.EverythingLearned)
+                        updateState(LearnFragment.State.EverythingLearned)
                     } else {
-                        mState.postValue(LearnFragment.State.NotEmpty)
-                        updateWordQueue()
+                        viewModelScope.launch {
+                            updatePositionIfNeeded()
+                            updateState(LearnFragment.State.NotEmpty)
+                            mWords.value = wordList!!
+                            mTriggerForceUpdate.value = Unit
+                        }
                     }
                 }
             }
         }
     }
 
-    fun addWordToLearned(callback: (WordDatabaseProvider.OperationResult) -> Unit) {
-        mCurrentWord.value!!.isLearned = true
+    private fun updateState(state: LearnFragment.State) {
+        if (mState.value != state) {
+            mState.postValue(state)
+        }
+    }
+
+    private fun updatePositionIfNeeded() {
+        if (
+            mState.value == LearnFragment.State.NotEmpty &&
+            mCurrentPosition.value == wordList!!.size
+        ) {
+            Log.d(LEARN_VIEW_MODEL, "updating position as dataset changed")
+            mCurrentPosition.value = mCurrentPosition.value!! - 1
+        }
+    }
+
+    fun addWordToLearned(
+        word: Word,
+        callback: (WordDatabaseProvider.OperationResult) -> Unit
+    ) {
+        word.isLearned = true
         ioCoroutineProvider.ioScope.launch {
             try {
-                databaseProvider.updateWord(mCurrentWord.value!!)
+                databaseProvider.updateWord(word)
                 callback.inScope(viewModelScope, WordDatabaseProvider.OperationResult.Success)
             } catch (exception: Exception) {
                 callback.inScope(viewModelScope, WordDatabaseProvider.OperationResult.Failure)
@@ -112,38 +147,56 @@ class LearnViewModel @Inject constructor(
         mIsShowingFirstPart.value = true
     }
 
-    private fun updateWordQueue() {
-        updatePositionIfNeeded()
-        mCurrentWord.postValue(wordList!![currentPosition])
+    fun onPositionUpdated(position: Int) {
+        Log.d(LEARN_VIEW_MODEL, "updating position to $position")
+        when (position) {
+            0 -> swipe(SwipeDirection.RIGHT)
+            2 -> swipe(SwipeDirection.LEFT)
+            else -> {
+                suppressNextFlip()
+                mMode.postValue(mMode.value!!)
+                suppressNextFlip()
+                mIsShowingFirstPart.postValue(mIsShowingFirstPart.value!!)
+            }
+        }
     }
 
-    fun swipe(direction: WordCardView.SwipeDirection) {
+    private fun swipe(direction: SwipeDirection) {
+        var position = mCurrentPosition.value!!
         viewModelScope.launch {
-            delay(RETURN_ANIMATION_DURATION + CARD_SWIPE_POST_ANIMATION)
             when (direction) {
-                is WordCardView.SwipeDirection.LEFT -> {
-                    currentPosition = (currentPosition + 1) % wordList!!.size
+                is SwipeDirection.LEFT -> {
+                    mCurrentPosition.value = (position + 1) % wordList!!.size
+                    Log.d(
+                        LEARN_VIEW_MODEL,
+                        "swiped left, new position = ${mCurrentPosition.value!!}"
+                    )
                 }
-                is WordCardView.SwipeDirection.RIGHT -> {
-                    currentPosition = (currentPosition - 1) % wordList!!.size
-                    if (currentPosition < 0) {
-                        currentPosition = wordList!!.size - 1
+                is SwipeDirection.RIGHT -> {
+                    position = (position - 1) % wordList!!.size
+                    if (position < 0) {
+                        mCurrentPosition.value = wordList!!.size - 1
+                    } else {
+                        mCurrentPosition.value = position
                     }
+                    Log.d(
+                        LEARN_VIEW_MODEL,
+                        "swiped right, new position = ${mCurrentPosition.value!!}"
+                    )
                 }
             }
+            suppressNextFlip()
             mIsShowingFirstPart.value = true
-            mCurrentWord.value = wordList!![currentPosition]
+            Log.d(
+                LEARN_VIEW_MODEL,
+                "updated showing first part to ${mIsShowingFirstPart.value!!}"
+            )
         }
     }
 
-    private fun updatePositionIfNeeded() {
-        if (currentPosition == wordList!!.size) {
-            currentPosition --
-        }
-    }
-
-    fun triggerCardFlip() {
+    fun updateShowingPart() {
         mIsShowingFirstPart.value = !mIsShowingFirstPart.value!!
+        Log.d(LEARN_VIEW_MODEL, "updated showing first part to ${mIsShowingFirstPart.value!!}")
     }
 
     fun changeMode() {
@@ -153,13 +206,18 @@ class LearnViewModel @Inject constructor(
         }
     }
 
-    fun speakOut() {
+    fun speakOut(word: Word) {
         ttsProvider.resetLocale(mMode.value!!, mIsShowingFirstPart.value!!)
         val text = if (mIsShowingFirstPart.value!!) {
-            mCurrentWord.value!!.first(mMode.value!!)
+            word.first(mMode.value!!)
         } else {
-            mCurrentWord.value!!.second(mMode.value!!)
+            word.second(mMode.value!!)
         }
         ttsProvider.speak(text)
+    }
+
+    fun suppressNextFlip() {
+        shouldSuppressNextFlip = true
+        Log.d(LEARN_VIEW_MODEL, "suppressing next flip")
     }
 }
