@@ -18,7 +18,7 @@ class TripleWordAdapter : RecyclerView.Adapter<TripleWordAdapter.WordViewHolder>
         const val ITEMS_IN_ADAPTER_BY_DESIGN = 3
     }
 
-    private var onWordLearnedCallback: ((Word) -> Unit)? = null
+    private var onLearnedPressedCallback: ((Word, Boolean) -> Unit)? = null
 
     private var onVoicePressedCallback: ((Word) -> Unit)? = null
 
@@ -35,8 +35,8 @@ class TripleWordAdapter : RecyclerView.Adapter<TripleWordAdapter.WordViewHolder>
             return value
         }
 
-    fun setOnLearnedListener(callback: (Word) -> Unit) {
-        onWordLearnedCallback = callback
+    fun setOnLearnedPressedListener(callback: (Word, Boolean) -> Unit) {
+        onLearnedPressedCallback = callback
     }
 
     fun setOnVoicePressedListener(callback: (Word) -> Unit) {
@@ -59,7 +59,11 @@ class TripleWordAdapter : RecyclerView.Adapter<TripleWordAdapter.WordViewHolder>
     fun forceSetShowingPart(isShowingFirstPart: Boolean) {
         Log.d(LEARN_ADAPTER, "forcing set showing first part to $isShowingFirstPart")
         mIsShowingFirstPart = isShowingFirstPart
-        notifyDataSetChanged()
+        try {
+            notifyDataSetChanged()
+        } catch (exception: IllegalStateException) {
+            Log.d(LEARN_ADAPTER, "unable to update dataset: ${exception.localizedMessage}")
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WordViewHolder {
@@ -106,7 +110,7 @@ class TripleWordAdapter : RecyclerView.Adapter<TripleWordAdapter.WordViewHolder>
             }
             view.setOnLearnedCallback {
                 Log.d(LEARN_ADAPTER, "clicked to learn $word")
-                onWordLearnedCallback?.invoke(word)
+                onLearnedPressedCallback?.invoke(word, it)
             }
             view.setOnVoicePressedCallback {
                 Log.d(LEARN_ADAPTER, "clicked to voice $word")

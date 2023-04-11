@@ -8,3 +8,8 @@ interface LearnComponent {
 
     fun inject(learnFragment: LearnFragment)
 }
+
+interface LearnComponentProvider {
+
+    val learnComponent: LearnComponent
+}

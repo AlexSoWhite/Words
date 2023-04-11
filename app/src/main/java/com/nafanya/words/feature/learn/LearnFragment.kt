@@ -11,9 +11,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.nafanya.words.R
-import com.nafanya.words.core.db.WordDatabaseProvider
 import com.nafanya.words.core.di.ApplicationComponent
-import com.nafanya.words.core.ui.BaseFragment
+import com.nafanya.words.core.ui.WordManipulatingFragment
+import com.nafanya.words.core.ui.WordManipulatingViewModel
 import com.nafanya.words.databinding.FragmentLearnBinding
 import com.nafanya.words.feature.Logger.LEARN_FRAGMENT
 import com.nafanya.words.feature.learn.TripleWordAdapter.Companion.WORD_CARD_TAG
@@ -22,9 +22,12 @@ import com.nafanya.words.feature.word.Word
 import kotlinx.coroutines.launch
 
 @SuppressLint("NotifyDataSetChanged")
-class LearnFragment : BaseFragment<FragmentLearnBinding>() {
+class LearnFragment : WordManipulatingFragment<FragmentLearnBinding>() {
 
     private val viewModel: LearnViewModel by viewModels { factory.get() }
+
+    override val manipulatingViewModel: WordManipulatingViewModel
+        get() = viewModel
 
     private var isPagerInitializationComplete = false
 
@@ -79,15 +82,12 @@ class LearnFragment : BaseFragment<FragmentLearnBinding>() {
         modeDescription.isVisible = true
         wordNumber.isVisible = true
         adapter = TripleWordAdapter()
-        adapter.setOnLearnedListener { word ->
+        adapter.setOnLearnedPressedListener { word, isLearned ->
             Log.d(LEARN_FRAGMENT, "marking as learned $word")
-            viewModel.addWordToLearned(word) {
-                when (it) {
-                    is WordDatabaseProvider.OperationResult.Success ->
-                        showToast(getString(R.string.string_marked_as_learned))
-                    is WordDatabaseProvider.OperationResult.Failure ->
-                        showToast(getString(R.string.string_error_occurred))
-                }
+            if (isLearned) {
+                markWordAsLearned(word)
+            } else {
+                markWordAsNotLearned(word)
             }
         }
         adapter.setOnWordClickListener {

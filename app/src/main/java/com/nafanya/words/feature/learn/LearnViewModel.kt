@@ -3,15 +3,16 @@ package com.nafanya.words.feature.learn
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.nafanya.words.core.coroutines.IOCoroutineProvider
-import com.nafanya.words.core.coroutines.inScope
 import com.nafanya.words.core.db.WordDatabaseProvider
+import com.nafanya.words.core.ui.WordManipulatingViewModel
 import com.nafanya.words.feature.Logger.LEARN_VIEW_MODEL
+import com.nafanya.words.feature.preferences.Settings
+import com.nafanya.words.feature.preferences.learning.LearningPreferences
 import com.nafanya.words.feature.tts.TtsProvider
 import com.nafanya.words.feature.word.Mode
 import com.nafanya.words.feature.word.Word
@@ -20,10 +21,11 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 class LearnViewModel @Inject constructor(
-    private val databaseProvider: WordDatabaseProvider,
-    private val ioCoroutineProvider: IOCoroutineProvider,
-    private val ttsProvider: TtsProvider
-) : ViewModel() {
+    override val ioCoroutineProvider: IOCoroutineProvider,
+    override val wordDatabaseProvider: WordDatabaseProvider,
+    private val ttsProvider: TtsProvider,
+    private val settings: Settings
+) : WordManipulatingViewModel() {
 
     private var wordList: List<Word>? = null
 
@@ -89,17 +91,20 @@ class LearnViewModel @Inject constructor(
 
     init {
         ioCoroutineProvider.ioScope.launch {
-            databaseProvider.words.collect {
-                if (it.isEmpty()) {
+            combine(
+                wordDatabaseProvider.words,
+                settings.learningPreferences
+            ) { list, preferences ->
+                Pair(list, preferences)
+            }.collect {
+                if (it.first.isEmpty()) {
                     updateState(LearnFragment.State.Empty)
                 } else {
-                    val list: MutableList<Word> = it.filter { word -> !word.isLearned } as MutableList<Word>
-                    wordList = if (wordList == null) {
+                    val list: MutableList<Word> = applyFilters(it.first, it.second) as MutableList<Word>
+                    if (wordList == null) {
                         list.shuffle()
-                        list
-                    } else {
-                        wordList!!.filter { word -> list.contains(word) }
                     }
+                    wordList = list
                     if (wordList!!.isEmpty()) {
                         updateState(LearnFragment.State.EverythingLearned)
                     } else {
@@ -112,6 +117,14 @@ class LearnViewModel @Inject constructor(
                     }
                 }
             }
+        }
+    }
+
+    private fun applyFilters(list: List<Word>, filters: LearningPreferences): List<Word> {
+        return list.filter { word ->
+            !word.isLearned && filters.showNotLearned ||
+                    word.testPriority != Word.TEST_PRIORITY_MIN && word.isLearned && filters.showNotMastered ||
+                    word.testPriority == Word.TEST_PRIORITY_MIN && filters.showMastered
         }
     }
 
@@ -129,22 +142,6 @@ class LearnViewModel @Inject constructor(
             Log.d(LEARN_VIEW_MODEL, "updating position as dataset changed")
             mCurrentPosition.value = mCurrentPosition.value!! - 1
         }
-    }
-
-    fun addWordToLearned(
-        word: Word,
-        callback: (WordDatabaseProvider.OperationResult) -> Unit
-    ) {
-        word.isLearned = true
-        ioCoroutineProvider.ioScope.launch {
-            try {
-                databaseProvider.updateWord(word)
-                callback.inScope(viewModelScope, WordDatabaseProvider.OperationResult.Success)
-            } catch (exception: Exception) {
-                callback.inScope(viewModelScope, WordDatabaseProvider.OperationResult.Failure)
-            }
-        }
-        mIsShowingFirstPart.value = true
     }
 
     fun onPositionUpdated(position: Int) {

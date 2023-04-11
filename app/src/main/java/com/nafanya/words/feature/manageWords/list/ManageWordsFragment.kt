@@ -17,16 +17,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.nafanya.words.R
 import com.nafanya.words.core.db.WordDatabaseProvider
 import com.nafanya.words.core.di.ApplicationComponent
-import com.nafanya.words.core.ui.BaseFragment
+import com.nafanya.words.core.ui.WordManipulatingFragment
+import com.nafanya.words.core.ui.WordManipulatingViewModel
 import com.nafanya.words.databinding.FragmentManageWordsBinding
 import com.nafanya.words.feature.tts.TtsProvider
 import com.nafanya.words.feature.word.Mode
 import com.nafanya.words.feature.word.Word
 import javax.inject.Inject
 
-class ManageWordsFragment : BaseFragment<FragmentManageWordsBinding>() {
+class ManageWordsFragment : WordManipulatingFragment<FragmentManageWordsBinding>() {
 
     private val viewModel: ManageWordsViewModel by viewModels { factory.get() }
+
+    override val manipulatingViewModel: WordManipulatingViewModel
+        get() = viewModel
 
     @Inject
     lateinit var ttsProvider: TtsProvider
@@ -152,32 +156,6 @@ class ManageWordsFragment : BaseFragment<FragmentManageWordsBinding>() {
             when (it) {
                 is WordDatabaseProvider.OperationResult.Success -> showToast(
                     getString(R.string.string_deleted_successfully)
-                )
-                is WordDatabaseProvider.OperationResult.Failure -> showToast(
-                    getString(R.string.string_error_occurred)
-                )
-            }
-        }
-    }
-
-    private fun markWordAsNotLearned(word: Word) {
-        viewModel.markWordAsNotLearned(word) {
-            when (it) {
-                is WordDatabaseProvider.OperationResult.Success -> showToast(
-                    getString(R.string.string_marked_as_not_learned)
-                )
-                is WordDatabaseProvider.OperationResult.Failure -> showToast(
-                    getString(R.string.string_error_occurred)
-                )
-            }
-        }
-    }
-
-    private fun markWordAsLearned(word: Word) {
-        viewModel.markWordAsLearned(word) {
-            when (it) {
-                is WordDatabaseProvider.OperationResult.Success -> showToast(
-                    getString(R.string.string_marked_as_learned)
                 )
                 is WordDatabaseProvider.OperationResult.Failure -> showToast(
                     getString(R.string.string_error_occurred)
