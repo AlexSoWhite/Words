@@ -20,7 +20,7 @@ class WordCardView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
-    private var onLearnedCallback: (() -> Unit)? = null
+    private var onLearnedPressedCallback: ((Boolean) -> Unit)? = null
 
     private var onVoicePressedCallback: (() -> Unit)? = null
 
@@ -44,8 +44,10 @@ class WordCardView @JvmOverloads constructor(
 
     init {
         binding.learnCheckbox.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                onLearnedCallback?.invoke()
+            if (
+                mWord?.isLearned == true && !isChecked ||
+                    mWord?.isLearned == false && isChecked) {
+                onLearnedPressedCallback?.invoke(isChecked)
             }
         }
 
@@ -54,8 +56,8 @@ class WordCardView @JvmOverloads constructor(
         }
     }
 
-    fun setOnLearnedCallback(callback: () -> Unit) {
-        onLearnedCallback = callback
+    fun setOnLearnedCallback(callback: (Boolean) -> Unit) {
+        onLearnedPressedCallback = callback
     }
 
     fun setOnVoicePressedCallback(callback: () -> Unit) {
@@ -66,7 +68,7 @@ class WordCardView @JvmOverloads constructor(
         Log.d(WORD_CARD_VIEW, "setting word $word")
         mWord = word
         mIsShowingFirstPart = true
-        binding.learnCheckbox.isChecked = false
+        binding.learnCheckbox.isChecked = word.isLearned
         updateText()
     }
 

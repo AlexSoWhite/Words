@@ -4,17 +4,22 @@ import android.content.Context
 import com.nafanya.words.core.ui.MainActivity
 import com.nafanya.words.feature.learn.di.LearnComponentProvider
 import com.nafanya.words.feature.manageWords.di.ManageWordsComponentProvider
+import com.nafanya.words.feature.preferences.di.PreferencesComponentProvider
+import com.nafanya.words.feature.preferences.di.PreferencesModule
 import com.nafanya.words.feature.test.di.TestComponentProvider
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
 
-@Component
+@Component(
+    modules = [PreferencesModule::class]
+)
 @Singleton
 interface ApplicationComponent :
     LearnComponentProvider,
     ManageWordsComponentProvider,
-    TestComponentProvider {
+    TestComponentProvider,
+    PreferencesComponentProvider {
 
     fun inject(mainActivity: MainActivity)
 

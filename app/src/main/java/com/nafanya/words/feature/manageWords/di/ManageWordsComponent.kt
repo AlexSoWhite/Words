@@ -10,3 +10,8 @@ interface ManageWordsComponent {
     fun inject(manageWordsFragment: ManageWordsFragment)
     fun inject(addWordFragment: AddWordFragment)
 }
+
+interface ManageWordsComponentProvider {
+
+    val manageWordsComponent: ManageWordsComponent
+}

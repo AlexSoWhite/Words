@@ -9,10 +9,10 @@
 
     <string name="app_version">Running %1$s version %2$s</string>
 
-    <string name="menu_home">Home</string>
     <string name="menu_manage_words">Your words</string>
     <string name="menu_learn">Learn</string>
     <string name="menu_test">Test</string>
+    <string name="menu_settings">Settings</string>
 
     <string name="string_continue">continue</string>
     <string name="string_finish">finish</string>
@@ -57,5 +57,12 @@
 
     <string name="string_app_description">Japanese vocabulary app</string>
     <string name="search">search</string>
+    <string name="string_show_not_learned">show not learned</string>
+    <string name="string_filters">filters:</string>
+    <string name="string_show_not_mastered">show not mastered</string>
+    <string name="string_show_mastered">show mastered</string>
+    <string name="string_tools">tools:</string>
+    <string name="string_writing_practice">writing practice</string>
+    <string name="string_learning_settings">Learning settings</string>
 
 </resources>

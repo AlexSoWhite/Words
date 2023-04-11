@@ -8,3 +8,8 @@ interface TestComponent {
 
     fun inject(testFragment: TestFragment)
 }
+
+interface TestComponentProvider {
+
+    val testComponent: TestComponent
+}
