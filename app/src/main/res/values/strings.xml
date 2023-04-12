@@ -19,7 +19,7 @@
     <string name="string_no_words_learned">You don\'t have any words marked as learned</string>
     <string name="string_submit">submit</string>
 
-    <string name="string_enter_word">enter word</string>
+    <string name="string_enter_word">enter word in japanese</string>
     <string name="string_enter_translation">enter translation</string>
     <string name="string_added_successfully">Added successfully</string>
     <string name="string_word_already_exists">Word already exists</string>
@@ -37,16 +37,16 @@
     <string name="string_word_mastered">mastered %1$d/%2$d</string>
 
     <string name="string_choose_mode">choose mode</string>
-    <string name="string_native_to_japanese">native to japanese</string>
-    <string name="string_japanese_to_native">japanese to native</string>
+    <string name="string_native_to_japanese">to japanese</string>
+    <string name="string_japanese_to_native">from japanese</string>
 
     <string name="string_change_mode">change mode</string>
     <string name="string_no_words_in_dictionary">You don\'t have any words in dictionary</string>
     <string name="string_everything_learned">You learned all your words!</string>
     <string name="string_marked_as_learned">Word marked as learned</string>
     <string name="string_error_occurred">An error occurred</string>
-    <string name="string_mode_description_japanese_to_native">translate japanese word to native</string>
-    <string name="string_mode_description_native_to_japanese">translate native word to japanese</string>
+    <string name="string_mode_description_japanese_to_native">translate from japanese</string>
+    <string name="string_mode_description_native_to_japanese">translate to japanese</string>
     <string name="string_word_number">word %1$d of %2$d</string>
 
     <string name="string_click_here_to_add_word">click here to add word</string>
