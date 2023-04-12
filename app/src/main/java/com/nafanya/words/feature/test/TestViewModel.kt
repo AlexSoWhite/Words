@@ -106,6 +106,7 @@ class TestViewModel @Inject constructor(
     }
 
     fun checkWord(firstPartInput: String) {
+        speakOut(mMode is Mode.WordToTranslation)
         val word = mCurrentWord.value!!
         word.dropTestAccumulators()
         val result = firstPartInput == word.first(mMode)
