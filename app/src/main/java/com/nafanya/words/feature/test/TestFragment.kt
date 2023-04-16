@@ -63,6 +63,9 @@ class TestFragment : BaseFragment<FragmentTestBinding>() {
                 Mode.TranslationToWord
             }
         )
+        viewModel.currentWord.observe(viewLifecycleOwner) {
+            renderWord(it.getString(FIRST_PART)!!, it.getString(SECOND_PART)!!)
+        }
         viewModel.state.observe(viewLifecycleOwner) {
             when (it) {
                 is State.NoWordsLearned -> renderEmptyList()
@@ -70,9 +73,6 @@ class TestFragment : BaseFragment<FragmentTestBinding>() {
                 is State.IsCheckedWord -> renderCheckedWord(it.isCorrect)
                 is State.IsLast -> renderLast(it.isCorrect, it.results)
             }
-        }
-        viewModel.currentWord.observe(viewLifecycleOwner) {
-            renderWord(it.getString(FIRST_PART)!!, it.getString(SECOND_PART)!!)
         }
         binding.firstPartInput.onFocusChangeListener =
             View.OnFocusChangeListener { v, b ->

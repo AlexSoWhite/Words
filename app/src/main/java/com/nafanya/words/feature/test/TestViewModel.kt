@@ -26,15 +26,11 @@ class TestViewModel @Inject constructor(
 ) : ViewModel() {
 
     private var mWordList: List<Word>? = null
-    private val mState: MutableLiveData<TestFragment.State> by lazy {
-        MutableLiveData()
-    }
+    private val mState = MutableLiveData<TestFragment.State>()
     val state: LiveData<TestFragment.State>
         get() = mState
 
-    private val mCurrentWord: MutableLiveData<Word> by lazy {
-        MutableLiveData()
-    }
+    private val mCurrentWord = MutableLiveData<Word>()
     val currentWord: LiveData<Bundle>
         get() = mCurrentWord.map {
             bundleOf(
@@ -71,28 +67,17 @@ class TestViewModel @Inject constructor(
 
     private fun createWordList(source: List<Word>): List<Word> {
         val list = mutableListOf<Word>()
-        source.sortedByDescending {
+        val data = source.sortedByDescending {
             word -> word.testPriority + word.accumulatedTestPriority
-        }.groupBy {
-            word -> word.testPriority + word.accumulatedTestPriority
-        }.entries.forEach { entry: Map.Entry<Int, List<Word>> ->
-            if (list.size < 10) {
-                entry.value.shuffled().forEach {
-                    if (list.size < 10) {
-                        list.add(it)
-                    } else {
-                        it.increaseBalancer(source.size)
-                        pendingList.add(it)
-                    }
-                }
-            } else {
-                entry.value.forEach {
-                    it.increaseBalancer(source.size)
-                    pendingList.add(it)
-                }
+        }
+        list.addAll(data.take(10))
+        if (data.size > 10) {
+            data.takeLast(data.size - 10).forEach {
+                it.increaseBalancer(data.size)
+                pendingList.add(it)
             }
         }
-        return list
+        return list.shuffled()
     }
 
     fun setMode(mode: Mode) {
