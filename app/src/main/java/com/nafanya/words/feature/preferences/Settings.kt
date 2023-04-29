@@ -32,7 +32,7 @@ class Settings @Inject constructor(
             )
             val showNotMastered = preferences.getBoolean(
                 PreferencesConstants.showNotMasteredKey,
-                defaultLearningPreferences.showNotLearned
+                defaultLearningPreferences.showNotMastered
             )
             val showMastered = preferences.getBoolean(
                 PreferencesConstants.showMasteredKey,

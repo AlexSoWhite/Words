@@ -7,114 +7,118 @@
     android:layout_height="match_parent"
     android:paddingBottom="10dp">
 
-    <com.google.android.material.card.MaterialCardView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardElevation="5dp"
-        android:layout_margin="15dp">
+        android:orientation="vertical">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <TextView
+            android:id="@+id/learning_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/string_learning_settings"
+            android:textSize="20sp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="20dp"/>
+
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:orientation="vertical">
+            app:cardElevation="5dp"
+            android:layout_margin="15dp">
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/vertical_guide_line"
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_begin="25dp" />
+                android:padding="10dp"
+                android:orientation="vertical">
 
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/vertical_guide_line"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_begin="25dp" />
 
-            <TextView
-                android:id="@+id/learning_header"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/string_learning_settings"
-                android:textSize="20sp"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="10dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/filters"
-                app:layout_constraintStart_toStartOf="parent"/>
+                <TextView
+                    android:id="@+id/filters"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/string_filters"
+                    android:textSize="18sp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintBottom_toTopOf="@id/show_not_learned"
+                    app:layout_constraintStart_toStartOf="@id/vertical_guide_line"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed" />
 
-            <TextView
-                android:id="@+id/filters"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/string_filters"
-                android:textSize="18sp"
-                android:layout_marginTop="20dp"
-                app:layout_constraintBottom_toTopOf="@id/show_not_learned"
-                app:layout_constraintStart_toStartOf="@id/vertical_guide_line"
-                app:layout_constraintTop_toBottomOf="@id/learning_header"
-                app:layout_constraintVertical_chainStyle="packed" />
+                <CheckedTextView
+                    android:id="@+id/show_not_learned"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+                    android:gravity="center"
+                    android:text="@string/string_show_not_learned"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toTopOf="@id/show_not_mastered"
+                    app:layout_constraintStart_toStartOf="@id/vertical_guide_line"
+                    app:layout_constraintTop_toBottomOf="@id/filters"
+                    tools:checked="true" />
 
-            <CheckedTextView
-                android:id="@+id/show_not_learned"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:checkMark="?android:attr/listChoiceIndicatorMultiple"
-                android:gravity="center"
-                android:text="@string/string_show_not_learned"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toTopOf="@id/show_not_mastered"
-                app:layout_constraintStart_toStartOf="@id/vertical_guide_line"
-                app:layout_constraintTop_toBottomOf="@id/filters"
-                tools:checked="true" />
+                <CheckedTextView
+                    android:id="@+id/show_not_mastered"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+                    android:gravity="center"
+                    android:text="@string/string_show_not_mastered"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toTopOf="@id/show_mastered"
+                    app:layout_constraintStart_toStartOf="@id/vertical_guide_line"
+                    app:layout_constraintTop_toBottomOf="@id/show_not_learned" />
 
-            <CheckedTextView
-                android:id="@+id/show_not_mastered"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:checkMark="?android:attr/listChoiceIndicatorMultiple"
-                android:gravity="center"
-                android:text="@string/string_show_not_mastered"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toTopOf="@id/show_mastered"
-                app:layout_constraintStart_toStartOf="@id/vertical_guide_line"
-                app:layout_constraintTop_toBottomOf="@id/show_not_learned" />
+                <CheckedTextView
+                    android:id="@+id/show_mastered"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+                    android:gravity="center"
+                    android:text="@string/string_show_mastered"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="@id/vertical_guide_line"
+                    app:layout_constraintBottom_toTopOf="@id/tools"
+                    app:layout_constraintTop_toBottomOf="@id/show_not_mastered" />
 
-            <CheckedTextView
-                android:id="@+id/show_mastered"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:checkMark="?android:attr/listChoiceIndicatorMultiple"
-                android:gravity="center"
-                android:text="@string/string_show_mastered"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="@id/vertical_guide_line"
-                app:layout_constraintBottom_toTopOf="@id/tools"
-                app:layout_constraintTop_toBottomOf="@id/show_not_mastered" />
+                <TextView
+                    android:id="@+id/tools"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/string_tools"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toTopOf="@+id/writing_practice"
+                    app:layout_constraintStart_toStartOf="@id/vertical_guide_line"
+                    app:layout_constraintTop_toBottomOf="@id/show_mastered" />
 
-            <TextView
-                android:id="@+id/tools"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="@string/string_tools"
-                android:textSize="18sp"
-                app:layout_constraintBottom_toTopOf="@+id/writing_practice"
-                app:layout_constraintStart_toStartOf="@id/vertical_guide_line"
-                app:layout_constraintTop_toBottomOf="@id/show_mastered" />
+                <CheckedTextView
+                    android:id="@+id/writing_practice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="10dp"
+                    android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+                    android:gravity="center"
+                    android:text="@string/string_writing_practice"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="@+id/vertical_guide_line"
+                    app:layout_constraintTop_toBottomOf="@+id/tools"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
 
-            <CheckedTextView
-                android:id="@+id/writing_practice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="10dp"
-                android:checkMark="?android:attr/listChoiceIndicatorMultiple"
-                android:gravity="center"
-                android:text="@string/string_writing_practice"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="@+id/vertical_guide_line"
-                app:layout_constraintTop_toBottomOf="@+id/tools"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.card.MaterialCardView>
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
 </ScrollView>
