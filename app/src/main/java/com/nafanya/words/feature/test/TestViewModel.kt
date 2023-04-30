@@ -94,7 +94,9 @@ class TestViewModel @Inject constructor(
         speakOut(mMode is Mode.WordToTranslation)
         val word = mCurrentWord.value!!
         word.dropTestAccumulators()
-        val result = firstPartInput == word.first(mMode)
+        val result = if (firstPartInput == word.first(mMode)) {
+            true
+        } else mMode == Mode.TranslationToWord && word.translations.contains(firstPartInput)
         if (result) {
             correctAnswers ++
             decreaseTestPriorityAndUpdate(word)

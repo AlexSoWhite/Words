@@ -36,25 +36,17 @@ data class Word(
         const val TEST_BALANCER_MIN = 0
     }
 
-    fun first(mode: Mode, showAll: Boolean = true): String {
+    fun first(mode: Mode): String {
         return if (mode is Mode.WordToTranslation) {
             word
         } else {
-            if (showAll) {
-                translations.joinToString("; ")
-            } else {
-                ""
-            }
+            translations.joinToString("; ")
         }
     }
 
-    fun second(mode: Mode, showAll: Boolean = true): String {
+    fun second(mode: Mode): String {
         return if (mode is Mode.WordToTranslation) {
-            if (showAll) {
-                translations.joinToString("; ")
-            } else {
-                ""
-            }
+            translations.joinToString("; ")
         } else {
             word
         }
