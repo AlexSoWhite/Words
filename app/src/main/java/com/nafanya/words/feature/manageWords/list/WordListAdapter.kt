@@ -54,7 +54,7 @@ class WordListAdapter(
 
         fun setWord(word: Word) {
             binding.wordItemText.text = word.word
-            binding.wordItemTranslation.text = word.translation
+            binding.wordItemTranslation.text = word.joinedTranslations()
             binding.root.setOnClickListener {
                 onWordPressCallback(word)
             }
@@ -103,12 +103,12 @@ class WordListAdapter(
 val diffUtilCallback = object : DiffUtil.ItemCallback<Word>() {
     override fun areContentsTheSame(oldItem: Word, newItem: Word): Boolean {
         return oldItem.word == newItem.word &&
-                oldItem.translation == newItem.translation &&
+                oldItem.joinedTranslations() == newItem.joinedTranslations() &&
                 oldItem.isLearned == newItem.isLearned
     }
 
     override fun areItemsTheSame(oldItem: Word, newItem: Word): Boolean {
         return oldItem.word == newItem.word &&
-                oldItem.translation == newItem.translation
+                oldItem.translations == newItem.translations
     }
 }

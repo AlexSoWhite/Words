@@ -34,7 +34,7 @@ class ManageWordsViewModel @Inject constructor(
                 query
             ) { list, query ->
                 mWords.postValue(list.reversed().filter { word ->
-                    word.word.contains(query) || word.translation.contains(query)
+                    word.applyQuery(query)
                 })
             }.collect()
         }
@@ -55,5 +55,17 @@ class ManageWordsViewModel @Inject constructor(
         viewModelScope.launch {
             query.emit(text)
         }
+    }
+
+    private fun Word.applyQuery(query: String): Boolean {
+        if (this.word.contains(query)) {
+            return true
+        }
+        translations.forEach {
+            if (it.contains(query)) {
+                return true
+            }
+        }
+        return false
     }
 }

@@ -59,6 +59,14 @@ object Dependencies {
         const val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutinesVersion}"
     }
 
+    object Gson {
+        object Versions {
+            const val gsonVersion = "2.10.1"
+        }
+
+        const val gson = "com.google.code.gson:gson:${Versions.gsonVersion}"
+    }
+
     object Test {
         object Versions {
             const val junit = "4.13.2"

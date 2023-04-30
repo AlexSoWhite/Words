@@ -18,3 +18,7 @@ exceptions:
 naming:
   PackageNaming:
     active: false
+
+style:
+  ReturnCount:
+    max: 4

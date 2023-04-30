@@ -12,7 +12,10 @@ sealed class Mode {
 @Entity
 data class Word(
     @PrimaryKey val word: String,
-    @ColumnInfo(name = "translation") val translation: String,
+    @ColumnInfo(
+        name = "translations",
+        defaultValue = ""
+    ) val translations: List<String>,
     @ColumnInfo(name = "isLearned", defaultValue = false.toString()) var isLearned: Boolean = false,
     @ColumnInfo(
         name = "testPriority",
@@ -33,20 +36,32 @@ data class Word(
         const val TEST_BALANCER_MIN = 0
     }
 
-    fun first(mode: Mode): String {
+    fun first(mode: Mode, showAll: Boolean = true): String {
         return if (mode is Mode.WordToTranslation) {
             word
         } else {
-            translation
+            if (showAll) {
+                translations.joinToString("; ")
+            } else {
+                ""
+            }
         }
     }
 
-    fun second(mode: Mode): String {
+    fun second(mode: Mode, showAll: Boolean = true): String {
         return if (mode is Mode.WordToTranslation) {
-            translation
+            if (showAll) {
+                translations.joinToString("; ")
+            } else {
+                ""
+            }
         } else {
             word
         }
+    }
+
+    fun joinedTranslations(): String {
+        return translations.joinToString("; ")
     }
 
     fun setMaxTestPriority() {

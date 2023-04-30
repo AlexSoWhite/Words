@@ -21,7 +21,9 @@ class WordDatabaseProvider @Inject constructor(
             context,
             WordDatabase::class.java,
             "word-database"
-        ).build()
+        )
+        .addTypeConverter(ListConverter())
+        .build()
 
     val words: SharedFlow<List<Word>>
         get() = database.wordDao().getAll().shareIn(

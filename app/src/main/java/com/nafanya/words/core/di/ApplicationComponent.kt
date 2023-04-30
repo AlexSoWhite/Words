@@ -1,6 +1,7 @@
 package com.nafanya.words.core.di
 
 import android.content.Context
+import com.google.gson.Gson
 import com.nafanya.words.core.ui.MainActivity
 import com.nafanya.words.feature.learn.di.LearnComponentProvider
 import com.nafanya.words.feature.manageWords.di.ManageWordsComponentProvider
@@ -25,11 +26,16 @@ interface ApplicationComponent :
 
     fun context(): Context
 
+    fun gson(): Gson
+
     @Component.Builder
     interface Builder {
 
         @BindsInstance
         fun context(context: Context): Builder
+
+        @BindsInstance
+        fun gson(gson: Gson): Builder
 
         fun build(): ApplicationComponent
     }
