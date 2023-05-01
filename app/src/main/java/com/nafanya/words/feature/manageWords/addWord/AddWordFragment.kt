@@ -9,6 +9,7 @@ import com.nafanya.words.R
 import com.nafanya.words.core.db.WordDatabaseProvider
 import com.nafanya.words.core.di.ApplicationComponent
 import com.nafanya.words.core.ui.BaseFragment
+import com.nafanya.words.core.ui.customViews.TextInputField
 import com.nafanya.words.databinding.FragmentAddWordBinding
 import com.nafanya.words.feature.word.Word
 
@@ -31,6 +32,23 @@ class AddWordFragment : BaseFragment<FragmentAddWordBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.submitButton.setOnClickListener { submitWord() }
+        setupSounder(binding.wordInput, binding.voiceWord)
+        setupSounder(binding.transcriptionInput, binding.voiceTranscription)
+    }
+
+    private fun setupSounder(textInputField: TextInputField, button: View) {
+        button.isEnabled = false
+        textInputField.addTextChangedListener {
+            val text = it?.toString()?.trim() ?: ""
+            if (text.isNotBlank() && text.isNotEmpty()) {
+                button.isEnabled = true
+                button.setOnClickListener {
+                    viewModel.speakOut(text)
+                }
+            } else {
+                button.isEnabled = false
+            }
+        }
     }
 
     private fun submitWord() {

@@ -23,18 +23,56 @@
         android:orientation="vertical"
         android:layout_marginHorizontal="25dp">
 
-        <com.nafanya.words.core.ui.customViews.TextInputField
-            android:id="@+id/word_input"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:hint="@string/string_enter_word" />
+            android:layout_height="wrap_content">
 
-        <com.nafanya.words.core.ui.customViews.TextInputField
-            android:id="@+id/transcription_input"
+            <com.nafanya.words.core.ui.customViews.TextInputField
+                android:id="@+id/word_input"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="5dp"
+                app:hint="@string/string_enter_word" />
+
+            <ImageView
+                android:id="@+id/voice_word"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:clickable="true"
+                android:focusable="true"
+                style="@style/selectableBorderless"
+                android:src="@drawable/ic_sound"/>
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            app:hint="@string/string_enter_transcription" />
+            android:layout_marginTop="5dp">
+
+            <com.nafanya.words.core.ui.customViews.TextInputField
+                android:id="@+id/transcription_input"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:layout_gravity="center_vertical"
+                app:hint="@string/string_enter_transcription" />
+
+            <ImageView
+                android:id="@+id/voice_transcription"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:clickable="true"
+                android:focusable="true"
+                style="@style/selectableBorderless"
+                android:src="@drawable/ic_sound"/>
+
+        </LinearLayout>
 
         <com.nafanya.words.core.ui.customViews.TextInputFieldsContainer
             android:id="@+id/translations"
