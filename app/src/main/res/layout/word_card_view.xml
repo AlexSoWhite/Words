@@ -31,6 +31,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/word_transcription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:gravity="center"
+            android:visibility="gone"
+            tools:visibility="visible"
+            tools:text="[shitsureshimas]"
+            app:layout_constraintStart_toStartOf="@id/word_text"
+            app:layout_constraintEnd_toEndOf="@id/word_text"
+            app:layout_constraintTop_toBottomOf="@id/word_text"/>
+
         <ImageView
             style="@style/selectableBorderless"
             android:id="@+id/word_sound"

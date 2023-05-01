@@ -53,7 +53,15 @@ class WordListAdapter(
         private val binding = WordListItemViewBinding.bind(itemView)
 
         fun setWord(word: Word) {
-            binding.wordItemText.text = word.word
+            binding.wordItemText.text = if (word.transcription.isEmpty()) {
+                word.word
+            } else {
+                context.getString(
+                    R.string.string_word_with_transcription,
+                    word.word,
+                    word.transcription
+                )
+            }
             binding.wordItemTranslation.text = word.joinedTranslations()
             binding.root.setOnClickListener {
                 onWordPressCallback(word)

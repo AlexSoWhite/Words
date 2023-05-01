@@ -6,6 +6,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
+import androidx.core.view.isVisible
+import com.nafanya.words.R
 import com.nafanya.words.databinding.WordCardViewBinding
 import com.nafanya.words.feature.Logger.WORD_CARD_VIEW
 import com.nafanya.words.feature.word.Mode
@@ -119,6 +121,20 @@ class WordCardView @JvmOverloads constructor(
         } else {
             mWord?.second(mMode)
         }
+        if (isShowingWord() && mWord?.transcription?.isNotEmpty() == true) {
+            binding.wordTranscription.text = context.getString(
+                R.string.string_transcription,
+                mWord?.transcription
+            )
+            binding.wordTranscription.isVisible = true
+        } else {
+            binding.wordTranscription.isVisible = false
+        }
+    }
+
+    private fun isShowingWord(): Boolean {
+        return mIsShowingFirstPart && mMode is Mode.WordToTranslation ||
+                !mIsShowingFirstPart && mMode is Mode.TranslationToWord
     }
 
     private suspend fun flipCard() {

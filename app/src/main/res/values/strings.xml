@@ -27,6 +27,7 @@
     <string name="string_some_fields_are_empty">Some fields are empty</string>
     <string name="string_field_must_have_text">this field cannot be empty or blank</string>
 
+    <string name="string_word_with_transcription">%1$s [%2$s]</string>
     <string name="string_delete_word">Delete word</string>
     <string name="string_mark_as_not_learned">Mark as not learned</string>
     <string name="string_mark_as_learned">Mark as learned</string>
@@ -50,6 +51,7 @@
     <string name="string_mode_description_japanese_to_native">translate from japanese</string>
     <string name="string_mode_description_native_to_japanese">translate to japanese</string>
     <string name="string_word_number">word %1$d of %2$d</string>
+    <string name="string_transcription">[%1$s]</string>
 
     <string name="string_click_here_to_add_word">click here to add word</string>
 
