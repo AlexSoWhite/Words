@@ -9,7 +9,7 @@ import com.nafanya.words.feature.word.Word
 
 @Database(
     entities = [Word::class],
-    version = 7,
+    version = 8,
     exportSchema = true,
     autoMigrations = [
         AutoMigration(from = 1, to = 2),
@@ -17,10 +17,11 @@ import com.nafanya.words.feature.word.Word
         AutoMigration(from = 3, to = 4),
         AutoMigration(from = 4, to = 5),
         AutoMigration(from = 5, to = 6),
-        AutoMigration(from = 6, to = 7, spec = DeleteTranslation::class)
+        AutoMigration(from = 6, to = 7, spec = DeleteTranslation::class),
+        AutoMigration(from = 7, to = 8)
     ]
 )
-@TypeConverters(com.nafanya.words.core.db.ListConverter::class)
+@TypeConverters(ListConverter::class)
 abstract class WordDatabase : RoomDatabase() {
     abstract fun wordDao(): WordDao
 }

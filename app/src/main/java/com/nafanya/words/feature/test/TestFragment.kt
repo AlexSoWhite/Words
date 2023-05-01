@@ -13,9 +13,7 @@ import com.nafanya.words.R
 import com.nafanya.words.core.di.ApplicationComponent
 import com.nafanya.words.core.ui.BaseFragment
 import com.nafanya.words.databinding.FragmentTestBinding
-import com.nafanya.words.feature.tts.TtsProvider
 import com.nafanya.words.feature.word.Mode
-import javax.inject.Inject
 
 class TestFragment : BaseFragment<FragmentTestBinding>() {
 
@@ -38,9 +36,6 @@ class TestFragment : BaseFragment<FragmentTestBinding>() {
             val results: Bundle
         ) : State()
     }
-
-    @Inject
-    lateinit var ttsProvider: TtsProvider
 
     override fun inflate(
         inflater: LayoutInflater,

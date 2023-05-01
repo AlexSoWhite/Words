@@ -20,10 +20,7 @@ import com.nafanya.words.core.di.ApplicationComponent
 import com.nafanya.words.core.ui.WordManipulatingFragment
 import com.nafanya.words.core.ui.WordManipulatingViewModel
 import com.nafanya.words.databinding.FragmentManageWordsBinding
-import com.nafanya.words.feature.tts.TtsProvider
-import com.nafanya.words.feature.word.Mode
 import com.nafanya.words.feature.word.Word
-import javax.inject.Inject
 
 class ManageWordsFragment : WordManipulatingFragment<FragmentManageWordsBinding>() {
 
@@ -31,9 +28,6 @@ class ManageWordsFragment : WordManipulatingFragment<FragmentManageWordsBinding>
 
     override val manipulatingViewModel: WordManipulatingViewModel
         get() = viewModel
-
-    @Inject
-    lateinit var ttsProvider: TtsProvider
 
     private lateinit var titleBase: String
 
@@ -68,8 +62,7 @@ class ManageWordsFragment : WordManipulatingFragment<FragmentManageWordsBinding>
         super.onViewCreated(view, savedInstanceState)
         val wordListAdapter = WordListAdapter(
             onWordPressCallback = {
-                ttsProvider.resetLocale(Mode.WordToTranslation, isVoicingFirstPart = true)
-                ttsProvider.speak(it.word)
+                viewModel.speakOut(it)
             },
             onDropDownMenuOptionChosen = { word: Word, id: Int ->
                 when (id) {

@@ -206,9 +206,9 @@ class LearnViewModel @Inject constructor(
     fun speakOut(word: Word) {
         ttsProvider.resetLocale(mMode.value!!, mIsShowingFirstPart.value!!)
         val text = if (mIsShowingFirstPart.value!!) {
-            word.first(mMode.value!!)
+            word.firstTranscription(mMode.value!!)
         } else {
-            word.second(mMode.value!!)
+            word.secondTranscription(mMode.value!!)
         }
         ttsProvider.speak(text)
     }

@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <declare-styleable name="TextInputField">
+        <attr name="hint" format="string"/>
+    </declare-styleable>
+
     <attr name="customPopupMenuTextColor" format="color|reference"/>
     <attr name="customPopupMenuBackground" format="color|reference"/>
     <attr name="customDoneIconColor" format="color|reference"/>
@@ -20,4 +25,5 @@
     <style name="dropdownMenuStyle" parent="Widget.AppCompat.ListPopupWindow">
         <item name="android:textColor">?attr/customPopupMenuTextColor</item>
     </style>
+    <style name="textInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox" />
 </resources>

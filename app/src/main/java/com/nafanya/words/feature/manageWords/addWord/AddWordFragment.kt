@@ -16,8 +16,6 @@ class AddWordFragment : BaseFragment<FragmentAddWordBinding>() {
 
     private val viewModel: AddWordViewModel by viewModels { factory.get() }
 
-    private lateinit var additionalEditTexts: AdditionalEditTexts
-
     override fun inflate(
         inflater: LayoutInflater,
         parent: ViewGroup?,
@@ -32,55 +30,46 @@ class AddWordFragment : BaseFragment<FragmentAddWordBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        additionalEditTexts = AdditionalEditTexts.Builder()
-            .attachTo(binding.linearLayout)
-            .build()
-        additionalEditTexts.attachNewTranslationInput()
         binding.submitButton.setOnClickListener { submitWord() }
     }
 
     private fun submitWord() {
-        val word = binding.wordInput.text?.toString()?.trim()
-        var isFieldsOk = true
-        if (!checkWord(word)) {
-            isFieldsOk = false
-        }
+        val (word, isWordFieldOk) = binding.wordInput.textWithCheck
+        val transcription = binding.transcriptionInput.textWithCheck.first ?: ""
         val translations = mutableListOf<String>()
-        additionalEditTexts.forEach {
-            val translation = it.text?.toString()?.trim()
-            if (!checkWord(translation)) {
-                isFieldsOk = false
+        var areTranslationsOk = true
+
+        binding.translations.smartForEach {
+            val (translation, isTranslationFieldOk) = it.textWithCheck
+            if (!isTranslationFieldOk) {
+                areTranslationsOk = false
             } else {
                 translations.add(translation!!)
             }
         }
 
-        if (isFieldsOk) {
-            viewModel.addWord(Word(word!!, translations)) {
+        if (isWordFieldOk && areTranslationsOk) {
+            viewModel.addWord(Word(word!!, transcription, translations)) {
                 when (it) {
-                    is WordDatabaseProvider.OperationResult.Success -> showToast(
-                        getString(R.string.string_added_successfully)
-                    )
+                    is WordDatabaseProvider.OperationResult.Success -> {
+                        showToast(
+                            getString(R.string.string_added_successfully)
+                        )
+                        clearInputs()
+                    }
                     is WordDatabaseProvider.OperationResult.Failure -> showToast(
                         getString(R.string.string_word_already_exists)
                     )
                 }
             }
-            clearInputs()
         } else {
             showToast(getString(R.string.string_some_fields_are_empty))
         }
     }
 
-    private fun checkWord(word: String?): Boolean {
-        if (word == null) {
-            return false
-        }
-        return word.isNotBlank() && word.isNotEmpty()
-    }
-
     private fun clearInputs() {
-        binding.wordInput.text!!.clear()
-        additionalEditTexts.clearAll()
+        binding.wordInput.clear()
+        binding.transcriptionInput.clear()
+        binding.translations.clearAll()
     }
 }

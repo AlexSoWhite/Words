@@ -12,6 +12,7 @@ sealed class Mode {
 @Entity
 data class Word(
     @PrimaryKey val word: String,
+    @ColumnInfo(name = "transcription", defaultValue = "") val transcription: String = "",
     @ColumnInfo(
         name = "translations",
         defaultValue = ""
@@ -44,11 +45,31 @@ data class Word(
         }
     }
 
+    fun firstTranscription(mode: Mode): String {
+        return if (mode is Mode.WordToTranslation) {
+            transcription.ifEmpty {
+                word
+            }
+        } else {
+            translations.joinToString("; ")
+        }
+    }
+
     fun second(mode: Mode): String {
         return if (mode is Mode.WordToTranslation) {
             translations.joinToString("; ")
         } else {
             word
+        }
+    }
+
+    fun secondTranscription(mode: Mode): String {
+        return if (mode is Mode.WordToTranslation) {
+            translations.joinToString("; ")
+        } else {
+            transcription.ifEmpty {
+                word
+            }
         }
     }
 

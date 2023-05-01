@@ -3,29 +3,43 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/add_root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingStart="25dp"
-    android:paddingEnd="25dp">
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0"
+        android:paddingVertical="50dp"
+        android:clipToPadding="false">
 
     <LinearLayout
         android:id="@+id/linear_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0.35">
+        android:layout_marginHorizontal="25dp">
 
-        <EditText
+        <com.nafanya.words.core.ui.customViews.TextInputField
             android:id="@+id/word_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/string_enter_word"
-            android:maxLines="1"
-            android:inputType="text"
-            android:layout_gravity="center" />
+            app:hint="@string/string_enter_word" />
+
+        <com.nafanya.words.core.ui.customViews.TextInputField
+            android:id="@+id/transcription_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            app:hint="@string/string_enter_transcription" />
+
+        <com.nafanya.words.core.ui.customViews.TextInputFieldsContainer
+            android:id="@+id/translations"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/submit_button"
@@ -36,4 +50,6 @@
             android:layout_gravity="center" />
 
     </LinearLayout>
+    </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

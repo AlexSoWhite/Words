@@ -147,9 +147,9 @@ class TestViewModel @Inject constructor(
     fun speakOut(isVoicingFirstPart: Boolean) {
         ttsProvider.resetLocale(mMode, isVoicingFirstPart)
         val text = if (isVoicingFirstPart) {
-            mCurrentWord.value!!.first(mMode)
+            mCurrentWord.value!!.firstTranscription(mMode)
         } else {
-            mCurrentWord.value!!.second(mMode)
+            mCurrentWord.value!!.secondTranscription(mMode)
         }
         ttsProvider.speak(text)
     }

@@ -21,9 +21,11 @@
 
     <string name="string_enter_word">enter word in japanese</string>
     <string name="string_enter_translation">enter translation</string>
+    <string name="string_enter_transcription">enter transcription (optional)</string>
     <string name="string_added_successfully">Added successfully</string>
     <string name="string_word_already_exists">Word already exists</string>
     <string name="string_some_fields_are_empty">Some fields are empty</string>
+    <string name="string_field_must_have_text">this field cannot be empty or blank</string>
 
     <string name="string_delete_word">Delete word</string>
     <string name="string_mark_as_not_learned">Mark as not learned</string>

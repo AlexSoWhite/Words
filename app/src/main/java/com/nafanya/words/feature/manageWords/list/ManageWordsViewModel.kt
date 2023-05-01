@@ -7,6 +7,8 @@ import com.nafanya.words.core.coroutines.IOCoroutineProvider
 import com.nafanya.words.core.coroutines.inScope
 import com.nafanya.words.core.db.WordDatabaseProvider
 import com.nafanya.words.core.ui.WordManipulatingViewModel
+import com.nafanya.words.feature.tts.TtsProvider
+import com.nafanya.words.feature.word.Mode
 import com.nafanya.words.feature.word.Word
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +18,8 @@ import kotlinx.coroutines.launch
 
 class ManageWordsViewModel @Inject constructor(
     override val ioCoroutineProvider: IOCoroutineProvider,
-    override val wordDatabaseProvider: WordDatabaseProvider
+    override val wordDatabaseProvider: WordDatabaseProvider,
+    private val ttsProvider: TtsProvider
 ) : WordManipulatingViewModel() {
 
     private val mWords: MutableLiveData<List<Word>> by lazy {
@@ -67,5 +70,10 @@ class ManageWordsViewModel @Inject constructor(
             }
         }
         return false
+    }
+
+    fun speakOut(word: Word) {
+        ttsProvider.resetLocale(Mode.WordToTranslation, isVoicingFirstPart = true)
+        ttsProvider.speak(word.firstTranscription(Mode.WordToTranslation))
     }
 }
